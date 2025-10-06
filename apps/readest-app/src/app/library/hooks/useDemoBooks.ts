@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useEnv } from '@/context/EnvContext';
 import { Book } from '@/types/book';
-import { getUserLang } from '@/utils/misc';
+import { getUserLang, isValidURL } from '@/utils/misc';
 import { isWebAppPlatform } from '@/services/environment';
 
 import libraryEn from '@/data/demo/library.en.json';
@@ -16,6 +16,26 @@ const libraries = {
 interface DemoBooks {
   library: string[];
 }
+
+const resolveDemoBookUrl = (url: string) => {
+  if (isValidURL(url)) {
+    return url;
+  }
+
+  if (typeof window !== 'undefined') {
+    if (url.startsWith('/')) {
+      return `${window.location.origin}${url}`;
+    }
+
+    try {
+      return new URL(url, window.location.origin).toString();
+    } catch {
+      return `${window.location.origin}/${url.replace(/^\/+/, '')}`;
+    }
+  }
+
+  return url;
+};
 
 export const useDemoBooks = () => {
   const { envConfig } = useEnv();
@@ -32,7 +52,9 @@ export const useDemoBooks = () => {
         const appService = await envConfig.getAppService();
         const demoBooks = libraries[userLang] || (libraries.en as DemoBooks);
         const books = await Promise.all(
-          demoBooks.library.map((url) => appService.importBook(url, [], false, true)),
+          demoBooks.library.map((url) =>
+            appService.importBook(resolveDemoBookUrl(url), [], false, true),
+          ),
         );
         setBooks(books.filter((book) => book !== null) as Book[]);
       } catch (error) {

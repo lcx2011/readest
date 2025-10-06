@@ -1,5 +1,5 @@
 {
   "library": [
-    "http://localhost:3000/books/xianni.epub"
+    "/books/xianni.epub"
   ]
 }
