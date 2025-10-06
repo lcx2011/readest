@@ -48,7 +48,7 @@ const nextConfig = {
   webpack(config) {
     config.resolve ??= {};
     config.resolve.alias ??= {};
-    config.resolve.alias['@pdfjs'] = pdfjsAliasPath;
+    config.resolve.alias['@pdfjs'] = pdfjsVendorDir;
     return config;
   },
   async headers() {
