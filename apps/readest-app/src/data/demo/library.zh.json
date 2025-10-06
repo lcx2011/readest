@@ -1,6 +1,5 @@
 {
   "library": [
-    "https://cdn.readest.com/books/four-great-classics.epub",
-    "https://cdn.readest.com/books/journey-to-the-west.epub"
+    "http://localhost:3000/books/xianni.epub"
   ]
 }
