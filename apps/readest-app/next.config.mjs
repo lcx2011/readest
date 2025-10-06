@@ -1,11 +1,14 @@
 import withPWAInit from '@ducanh2912/next-pwa';
 import withBundleAnalyzer from '@next/bundle-analyzer';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const isDev = process.env['NODE_ENV'] === 'development';
 const appPlatform = process.env['NEXT_PUBLIC_APP_PLATFORM'];
 
-const pdfjsAliasPath = fileURLToPath(new URL('./public/vendor/pdfjs', import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const pdfjsVendorDir = path.resolve(__dirname, 'public/vendor/pdfjs');
 
 if (isDev) {
   const { initOpenNextCloudflareForDev } = await import('@opennextjs/cloudflare');
