@@ -1,8 +1,11 @@
 import withPWAInit from '@ducanh2912/next-pwa';
 import withBundleAnalyzer from '@next/bundle-analyzer';
+import { fileURLToPath } from 'node:url';
 
 const isDev = process.env['NODE_ENV'] === 'development';
 const appPlatform = process.env['NEXT_PUBLIC_APP_PLATFORM'];
+
+const pdfjsAliasPath = fileURLToPath(new URL('./public/vendor/pdfjs', import.meta.url));
 
 if (isDev) {
   const { initOpenNextCloudflareForDev } = await import('@opennextjs/cloudflare');
@@ -39,6 +42,12 @@ const nextConfig = {
         'marked',
       ]
     : [],
+  webpack(config) {
+    config.resolve ??= {};
+    config.resolve.alias ??= {};
+    config.resolve.alias['@pdfjs'] = pdfjsAliasPath;
+    return config;
+  },
   async headers() {
     return [
       {
